@@ -1,0 +1,162 @@
+.username,
+.userPhone,
+.password,
+.nickname,
+
+.confirmPassword {
+
+    .ant-form-item {
+
+        display: flex;
+        justify-content: center;
+
+        .ant-input {
+            height: 40px;
+        }
+
+    }
+
+}
+
+.captcha {
+    .ant-form-item {
+
+
+        .ant-input {
+            height: 40px;
+            width: 109.5%;
+        }
+
+    }
+
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+
+    .ant-btn {
+        padding: 0 165px;
+        height: 40px;
+    }
+}
+
+
+
+.inp-box {
+    .ant-input {
+        height: 46px;
+
+        border: none !important;
+        box-shadow: none !important;
+    }
+}
+
+.str-inp-box {
+    .ant-input {
+        height: 40px;
+
+
+        border: 3px solid orange !important;
+        border-right: 0px !important;
+        box-shadow: none !important;
+    }
+}
+
+.icon-search {
+    svg {
+        width: 28px;
+        height: 28px;
+        color: orange;
+    }
+}
+
+.icon-position {
+    svg {
+        width: 10px;
+        height: 12px;
+    }
+
+}
+
+.write-btn {
+    .ant-btn {
+        height: 40px;
+    }
+}
+
+.HTMLcontent {
+    font-size: 16px;
+}
+
+p img {
+    max-width: 700px;
+}
+
+div h2 {
+    font-weight: 700;
+    font-size: 25px;
+}
+
+div h3 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.iconEditOutlined {
+    svg {
+        width: 40px;
+        height: 40px;
+        color: orange;
+    }
+
+}
+
+.iconShareAltOutlined {
+
+    svg {
+        width: 40px;
+        height: 40px;
+        color: orange;
+    }
+
+}
+
+.autocomplete-box {
+    .ant-select-auto-complete.ant-select .ant-input {
+        height: 40px;
+    }
+}
+
+.expand-icon-box {
+
+    svg {
+        width: 30px;
+        height: 32px;
+    }
+
+}
+
+
+.expand-icon-box {
+
+    svg {
+        width: 30px;
+        height: 32px;
+    }
+
+}
+.icon-one {
+
+    svg {
+        
+        color: #409EFF;
+    }
+
+}
+.icon-three{
+    svg {
+        color: #409EFF;
+    }
+}
+
