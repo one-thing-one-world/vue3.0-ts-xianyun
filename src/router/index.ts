@@ -74,7 +74,29 @@ const routes: Array<RouteRecordRaw> = [
 
           title: "闲云旅游网"
         }
+      },
+      {
+        path: 'orderTicket',
+        name: 'orderTicket',
+        component: () => import('../views/orderTicket.vue'),
+        
+        meta: {
+
+          title: "闲云旅游网"
+        }
+      },
+      {
+        
+        path: 'write',
+        name: 'write',
+        component: () => import('../views/write.vue'),
+        
+        meta: {
+
+          title: "闲云旅游网"
+        }
       }
+      
       
       
 
@@ -83,6 +105,7 @@ const routes: Array<RouteRecordRaw> = [
     ]
 
   },
+
 ]
 
 const router = createRouter({

@@ -5,25 +5,33 @@
         <img src="http://157.122.54.189:9095/assets/images/th03.jfif" alt />
       </div>
 
-      <div v-if="flag===0" class="box-login">
+      <div v-if="flag === 0" class="box-login">
         <div class="df choseHover m-b-20">
           <div
             class="loginList-loop ccc"
-            :class="{'choseBg':num===index}"
+            :class="{ choseBg: num === index }"
             @click="choseItem(index)"
-            v-for="(item,index) in loginList"
+            v-for="(item, index) in loginList"
             :key="index"
           >
-            <div class="ccc loginList-loop-item">{{item.name}}</div>
-            <div :class="{'clickLine':num===index}"></div>
+            <div class="ccc loginList-loop-item">{{ item.name }}</div>
+            <div :class="{ clickLine: num === index }"></div>
           </div>
         </div>
 
         <div class="form-container-login">
-          <a-form ref="ruleForm1" :model="form" :rules="rules" :wrapper-col="wrapperCol">
+          <a-form
+            ref="ruleForm1"
+            :model="form"
+            :rules="rules"
+            :wrapper-col="wrapperCol"
+          >
             <div class="username">
               <a-form-item ref="username" name="username">
-                <a-input placeholder="用户名/手机" v-model:value="form.username" />
+                <a-input
+                  placeholder="用户名/手机"
+                  v-model:value="form.username"
+                />
               </a-form-item>
             </div>
             <div class="password">
@@ -45,31 +53,42 @@
         </div>
       </div>
 
-      <div v-if="flag===1" class="box-register">
+      <div v-if="flag === 1" class="box-register">
         <div class="df choseHover m-b-20">
           <div
             class="loginList-loop ccc"
-            :class="{'choseBg':num===index}"
+            :class="{ choseBg: num === index }"
             @click="choseItem(index)"
-            v-for="(item,index) in loginList"
+            v-for="(item, index) in loginList"
             :key="index"
           >
-            <div class="ccc loginList-loop-item">{{item.name}}</div>
-            <div :class="{'clickLine':num===index}"></div>
+            <div class="ccc loginList-loop-item">{{ item.name }}</div>
+            <div :class="{ clickLine: num === index }"></div>
           </div>
         </div>
 
         <div class="form-container-login">
-          <a-form ref="ruleForm2" :model="formRegister" :rules="rules" :wrapper-col="wrapperCol">
+          <a-form
+            ref="ruleForm2"
+            :model="formRegister"
+            :rules="rules"
+            :wrapper-col="wrapperCol"
+          >
             <div class="userPhone">
               <a-form-item ref="userPhone" name="userPhone">
-                <a-input placeholder="用户名手机" v-model:value="formRegister.userPhone" />
+                <a-input
+                  placeholder="用户名手机"
+                  v-model:value="formRegister.userPhone"
+                />
               </a-form-item>
             </div>
             <div class="captcha df j-center">
               <div class="captcha-box">
                 <a-form-item ref="captcha" name="captcha">
-                  <a-input placeholder="验证码" v-model:value="formRegister.captcha" />
+                  <a-input
+                    placeholder="验证码"
+                    v-model:value="formRegister.captcha"
+                  />
                 </a-form-item>
               </div>
               <div class="ccc captcha-text">
@@ -78,17 +97,26 @@
             </div>
             <div class="nickname">
               <a-form-item ref="nickname" name="nickname">
-                <a-input placeholder="昵称" v-model:value="formRegister.nickname" />
+                <a-input
+                  placeholder="昵称"
+                  v-model:value="formRegister.nickname"
+                />
               </a-form-item>
             </div>
             <div class="password">
               <a-form-item ref="password" name="password">
-                <a-input placeholder="密码" v-model:value="formRegister.password" />
+                <a-input
+                  placeholder="密码"
+                  v-model:value="formRegister.password"
+                />
               </a-form-item>
             </div>
             <div class="confirmPassword">
               <a-form-item ref="confirmPassword" name="confirmPassword">
-                <a-input placeholder="确认密码" v-model:value="formRegister.confirmPassword" />
+                <a-input
+                  placeholder="确认密码"
+                  v-model:value="formRegister.confirmPassword"
+                />
               </a-form-item>
             </div>
 
@@ -302,7 +330,11 @@ export default defineComponent({
               password: data.form.password,
             })
             .then((res: any) => {
+              
               localStorage.setItem("token", res.token);
+              localStorage.setItem("user", JSON.stringify(res.user));
+              ruleForm1.value.resetFields();
+              router.push("/");
               router.push({
                 name: "Home",
               });

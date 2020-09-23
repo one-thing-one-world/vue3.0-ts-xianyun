@@ -8,6 +8,7 @@ declare module 'axios' {
     data: T;
     total: number;
     id: string;
+    
 
 
   }

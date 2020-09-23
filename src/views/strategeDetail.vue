@@ -2,22 +2,23 @@
   <div class="df j-center">
     <div class="strategeDetail df j-bettween">
       <div class="strategeDetail-left">
-        
         <div class>
           <span class="stratege-text">旅游攻略</span>
           <span class="irace-line">/</span>
           <span class="gray-text">攻略详情</span>
         </div>
 
-        <div v-if="dataItem.length>0" class="title">{{dataItem[0].title}}</div>
+        <div v-if="dataItem.length > 0" class="title">
+          {{ dataItem[0].title }}
+        </div>
         <div class="title-line"></div>
-        <div class="df m-t-10 m-b-10 gray j-end" v-if="dataItem.length>0">
+        <div class="df m-t-10 m-b-10 gray j-end" v-if="dataItem.length > 0">
           <div>
-            <span>攻略:{{dataItem[0].updated_at}}</span>
-            <span>阅读:{{dataItem[0].watch}}</span>
+            <span>攻略:{{ dataItem[0].updated_at }}</span>
+            <span>阅读:{{ dataItem[0].watch }}</span>
           </div>
         </div>
-        <div v-if="dataItem.length>0">
+        <div v-if="dataItem.length > 0">
           <div class="HTMLcontent">
             <div v-html="dataItem[0].content"></div>
           </div>
@@ -40,7 +41,7 @@
         <div class="comment-text">评论</div>
         <div>
           <textarea
-            :class="{'focusStyle':flag===true}"
+            :class="{ focusStyle: flag === true }"
             class="area-box"
             @focus="focusTextArea"
             @blur="blurTextArea"
@@ -64,7 +65,11 @@
                   <div class="ant-upload-text">请上传</div>
                 </div>
               </a-upload>
-              <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+              <a-modal
+                :visible="previewVisible"
+                :footer="null"
+                @cancel="handleCancel"
+              >
                 <img alt="example" style="width: 100%" :src="previewImage" />
               </a-modal>
             </div>
@@ -85,7 +90,7 @@
               :page-size="pageSize"
               @showSizeChange="onShowSizeChange"
               @change="change"
-              :show-total="total => `总共 ${total} 条`"
+              :show-total="(total) => `总共 ${total} 条`"
             >
               <template v-slot:buildOptionText="props">
                 <span v-if="props.value !== '00'">{{ props.value }}条/页</span>
@@ -95,7 +100,25 @@
         </div>
       </div>
 
-      <div class="strategeDetail-right r1"></div>
+      <div class="strategeDetail-right ">
+        <div class="rigthBox">
+          <div class="relevanName fs18 df">相关攻略</div>
+          <div
+            v-for="(item, index) in relevantList.slice(0,1)"
+            :key="index"
+            class="relevanList  flex"
+          >
+            <img :src="item.images[0]" alt class="imgs" />
+            <div class="titleAll m-l-10 flex column df j-bettween">
+              <div class="relevanTitle m-l-10">{{ item.title }}</div>
+              <div class="df m-r-10 ">
+                <div class="time">{{ item.updatedAt }}</div>
+                <div class="m-r-10">阅读 {{ item.watch }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -111,8 +134,10 @@ import {
 } from "vue";
 import { useRoute } from "vue-router";
 import api from "@/http/api";
+import dayjs from "dayjs";
 
 interface Data {
+  relevantList: object[];
   pageSizeOptions: string[];
   current: number;
   pageSize: number;
@@ -129,6 +154,7 @@ interface Data {
   strategeDetailData: string;
   textAreaValue: string;
 }
+
 interface FileList {
   uid: string;
   name: string;
@@ -164,6 +190,7 @@ export default defineComponent({
     const route = useRoute();
 
     const data: Data = reactive<Data>({
+      relevantList:[],
       pageSizeOptions: ["5", "10", "15", "20", "00"],
       current: 1,
       //pagesieze就是控制第一页默认的条数
@@ -238,11 +265,29 @@ export default defineComponent({
     const onShowSizeChange = (current: number, pageSize: number) => {
       console.log(current, pageSize);
       data.pageSize = pageSize;
-
-   
     };
     const change = (page: number, pageSize: number) => {
-     console.log(page);
+      console.log(page);
+    };
+    const relevant = (): void => {
+      api
+        .relevantPost(data.id)
+        .then((res) => {
+          console.log(res);
+          data.relevantList = res.data;
+          data.relevantList.map((item: any) => {
+            item.images = [
+              "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3331153567,892519749&fm=15&gp=0.jpg",
+            ];
+            item.updatedAt = dayjs(item.updatedAt).format("YYYY.MM.DD HH:mm");
+            if (item.watch === null) {
+              item.watch = 0
+            }
+          });
+        })
+        .catch((err: Error) => {
+          console.log(err);
+        });
     };
 
     onMounted(() => {
@@ -250,6 +295,7 @@ export default defineComponent({
       data.id = Number(id);
       getArticalDetail(data.id);
       getRecommend(data.id);
+      relevant();
     });
 
     return {
@@ -263,12 +309,27 @@ export default defineComponent({
       getBase64,
       onShowSizeChange,
       change,
+      relevant,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
+.relevanName{
+  height:24px;
+  margin-bottom:10px;
+  
+}
+.relevanList{
+border-top: 1px solid gray;
+padding-top: 10px;
+}
+.imgs{
+  width: 100px;
+  height: 80px;
+}
+
 .comment-text {
   font-size: 18px;
   margin-top: 20px;

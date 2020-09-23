@@ -1,5 +1,6 @@
 <template>
   <div class="footer-wrapper">
+
         <div class="footer">
             <a-row class="info-list">
                 <a-col :span="6" :offset="1">
@@ -42,8 +43,9 @@
     </div>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 import { defineComponent, reactive, toRefs, SetupContext } from "vue";
+
 
 interface Data {
   msg: string;
@@ -51,7 +53,9 @@ interface Data {
 export default defineComponent({
   name: "",
   props: {},
-  components: {},
+  components: {
+      
+  },
   setup(props, ctx: SetupContext) {
     console.log(ctx);
 

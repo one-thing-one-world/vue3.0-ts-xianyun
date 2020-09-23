@@ -21,11 +21,10 @@
             <div class="df autocomplete-box a-center">
               <a-auto-complete
                 v-model:value="valueCity1"
-                :data-source="dataSource"
+                :data-source="dataSource1"
                 style="width: 200px"
                 placeholder="请搜索出发城市"
                 @select="onSelect1"
-                @search="onSearch1"
                 @change="onChange1"
               />
             </div>
@@ -36,15 +35,14 @@
             <div class="df autocomplete-box a-center">
               <a-auto-complete
                 v-model:value="valueCity2"
-                :data-source="dataSource"
-                style="width: 200px;height:40px;"
+                :data-source="dataSource2"
+                style="width: 200px;"
                 placeholder="请搜索到达城市"
                 @select="onSelect2"
-                @search="onSearch2"
                 @change="onChange2"
               />
               <div class="change-text">
-                <div class="text-box ccc">换</div>
+                <div @click="changeCity" class="text-box ccc">换</div>
               </div>
             </div>
           </div>
@@ -52,19 +50,22 @@
           <div class="m-t-20 df">
             <div class="startTime m-l-20 ccc">出发时间</div>
             <div class="data-picker-box">
+
               <a-date-picker
                 style="width: 200px"
                 :size="large"
                 @change="onChange"
-                format="YYYY-MM-DD HH:mm:ss"
+                format="YYYY-MM-DD"
                 :disabled-date="disabledDate"
-                :show-time="{ defaultValue: moment('00:00:00', 'HH:mm:ss') }"
+                placeholder="选择时间"
               />
+             
+              
             </div>
           </div>
 
           <div class="top-btn-box m-t-20">
-            <a-button style="width:78%" type="primary">
+            <a-button @click="goToTicketDetail" style="width:78%" type="primary">
               <SearchOutlined />搜索
             </a-button>
           </div>
@@ -131,12 +132,19 @@ import moment from "moment";
 import { useRouter } from "vue-router";
 
 interface Data {
+  arr: [];
+  msg2: string;
   msg: string;
-  valueCity1: "";
-  valueCity2: "";
-  dataSource: DataSource[];
+  valueCity1: string;
+  valueCity2: string;
+  dataSource1: string[];
+  dataSource2: string[];
   large: string;
+  name: string;
   specialFaresObj: SpecialFaresObj;
+  sort1: string;
+  sort2: string;
+  departDate: string;
 }
 interface SpecialFaresObj {
   specialFaresList?: SpecialFaresList[];
@@ -151,7 +159,7 @@ interface SpecialFaresList {
   price?: string;
 }
 interface DataSource {
-  msg?: string;
+  name?: string;
 }
 
 export default defineComponent({
@@ -162,10 +170,14 @@ export default defineComponent({
     console.log(ctx);
 
     const data: Data = reactive<Data>({
-      msg: "home",
+      name: "",
+      msg: "",
+      msg2: "",
+      arr: [],
       valueCity1: "",
       valueCity2: "",
-      dataSource: [],
+      dataSource1: [],
+      dataSource2: [],
       large: "large",
       specialFaresObj: {
         specialFaresList: [
@@ -180,29 +192,46 @@ export default defineComponent({
           },
         ],
       },
+      sort1: "",
+      sort2: "",
+      departDate: "",
     });
-    const router = useRouter()
+    const router = useRouter();
 
     const disabledDate = (current: any) => {
-      return current && current < moment().endOf("day");
+      
+      return  current && current < moment().subtract("day",1);
+    };
+
+    const onSelect1 = (value: string) => {
+      console.log("onSelect1", value);
+    };
+
+    const onChange1 = (value: any) => {
+      data.dataSource1 = [];
+      console.log("onChange1", value);
+      api
+        .getRealTimeCity({ name: value })
+        .then((res: any) => {
+          console.log(res);
+          if (res.data[0].name) {
+            const name = res.data[0].name;
+            data.dataSource1.push(name);
+            data.sort1 = res.data[0].sort;
+          }
+        })
+        .catch((err: Error) => {
+          console.log(err);
+        });
     };
 
     const onSearch1 = (searchText: any) => {
-      console.log(data.valueCity1, searchText, "onSearch1");
-      data.dataSource = !searchText
+      data.dataSource1 = !searchText
         ? []
         : [searchText, searchText.repeat(2), searchText.repeat(3)];
     };
-
-    const onSelect1 = (value: any) => {
-      console.log("onSelect1", value);
-    };
-    const onChange1 = (value: any) => {
-      console.log("onChange1", value);
-    };
     const onSearch2 = (searchText: any) => {
-      console.log(data.valueCity2, searchText, "onSearch2");
-      data.dataSource = !searchText
+      data.dataSource2 = !searchText
         ? []
         : [searchText, searchText.repeat(2), searchText.repeat(3)];
     };
@@ -210,18 +239,48 @@ export default defineComponent({
     const onSelect2 = (value: any) => {
       console.log("onSelect2", value);
     };
-    const onChange2 = (value: any) => {
+    const onChange2 = (value: string) => {
+      data.dataSource2 = [];
       console.log("onChange2", value);
+      api
+        .getRealTimeCity({ name: value })
+        .then((res: any) => {
+          console.log(res);
+          if (res.data[0].name) {
+            const name = res.data[0].name;
+            data.dataSource2.push(name);
+            data.sort2 = res.data[0].sort;
+          }
+        })
+        .catch((err: Error) => {
+          console.log(err);
+        });
     };
-    const onChange = (date: any, dateString: any) => {
-      console.log(date, dateString);
+    const onChange = (date: any, dateString: string) => {
+      data.departDate = dateString;
+    };
+
+    const goToTicketDetail = () => {
+      const item = {
+        departCity: data.valueCity1,
+        departCode: data.sort1,
+        destCity: data.valueCity2,
+        destCode: data.sort2,
+        departDate: data.departDate,
+      };
+
+      const items = JSON.stringify(item);
+
+      localStorage.setItem("ticketDetail", items);
+      router.push({
+        name: "ticketDetail",
+      });
     };
     const goToTicketPage = (item: any) => {
       console.log(item);
-      router.push({name:"ticketDetail"})
-      const items = JSON.stringify(item)
-      localStorage.setItem('ticketDetail',items)
-
+      router.push({ name: "ticketDetail" });
+      const items = JSON.stringify(item);
+      localStorage.setItem("ticketDetail", items);
     };
     const autoGetSpecialFares = () => {
       api
@@ -234,6 +293,16 @@ export default defineComponent({
           console.log(err);
         });
     };
+
+    const changeCity = () => {
+      data.arr = JSON.parse(JSON.stringify(data.dataSource2));
+      data.dataSource2 = JSON.parse(JSON.stringify(data.dataSource1));
+      data.dataSource1 = data.arr;
+      data.msg = data.valueCity2;
+      data.valueCity2 = data.valueCity1;
+      data.valueCity1 = data.msg;
+    };
+
     onMounted(() => {
       autoGetSpecialFares();
     });
@@ -242,15 +311,17 @@ export default defineComponent({
       ...toRefs(data),
       moment,
       disabledDate,
-      onSearch1,
       onSelect1,
       onChange1,
-      onSearch2,
       onSelect2,
       onChange2,
       onChange,
       autoGetSpecialFares,
       goToTicketPage,
+      onSearch1,
+      onSearch2,
+      changeCity,
+      goToTicketDetail,
     };
   },
 });
@@ -327,6 +398,9 @@ export default defineComponent({
   font-size: 12px;
   background: gray;
   color: white;
+}
+.text-box:hover {
+  cursor: pointer;
 }
 
 .change-text {

@@ -33,7 +33,7 @@
         <div class="line"></div>
       </div>
       <div class="write-btn ccc">
-        <a-button type="primary">
+        <a-button @click="goToWrite" type="primary">
           <EditOutlined />写游记
         </a-button>
       </div>
@@ -87,7 +87,7 @@
         <div class="right-box m-t-20">
 
           <div @click="goToDetail(item)" class="item2-text">{{item.title}}</div>
-          <div class="item1-summary points">{{item.summary}}</div>
+          <div class="item2-summary points">{{item.summary}}</div>
 
           <div class="df bottom-box j-bettween">
             <div class="df account-box">
@@ -161,10 +161,6 @@ interface Data {
   pageSize: number;
   total: number;
 }
-interface Resitem {
-  dataItem: DataItem[];
-  total: string;
-}
 
 interface ChoseCiTyItem {
   name: string;
@@ -173,6 +169,12 @@ interface ChoseCiTyItem {
 interface TitleCityList {
   name: string;
 }
+
+interface Resitem {
+  dataItem: DataItem[];
+  total: string;
+}
+
 interface DataItem {
   title?: string;
   summary?: string;
@@ -308,6 +310,11 @@ export default defineComponent({
 
       localStorage.setItem("strategeDetailData", strategeDetailData);
     };
+    const goToWrite = ()=>{
+      router.push({
+        name: 'write'
+      })
+    }
 
     onMounted(() => {
       getAllList();
@@ -324,6 +331,7 @@ export default defineComponent({
       enterItem,
       choseSomeCity,
       goToDetail,
+      goToWrite,
     };
   },
 });
@@ -390,6 +398,10 @@ export default defineComponent({
 .item1-summary {
   height: 62px;
 }
+.item2-summary {
+  height: 58px;
+}
+
 
 .item1-text {
   margin-top: 20px;

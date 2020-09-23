@@ -146,17 +146,103 @@ div h3 {
     }
 
 }
+
 .icon-one {
 
     svg {
-        
+
         color: #409EFF;
     }
 
 }
-.icon-three{
+
+.icon-three {
     svg {
         color: #409EFF;
     }
 }
 
+.option1,
+.option2,
+.option3,
+.option4 {
+    .ant-cascader-picker {
+
+        width: 114px;
+        height: 27px;
+        display: flex;
+        align-items: center;
+
+    }
+
+}
+
+
+.option1,
+.option2,
+.option3,
+.option4 {
+    .ant-cascader-input.ant-input {
+        height: 28px !important;
+        border-radius: 4px 4px;
+    }
+}
+
+.ant-card-body{
+    padding:15px;
+}
+.seat-container{
+    .ant-card-body{
+        padding:0px;
+    }
+}
+.right-box{
+    margin-top: 12px;
+    font-size: 12px;
+    .ant-card-body{
+        padding:0px;
+    }
+}
+.history{
+  
+    .ant-card-body{
+        padding:10px;
+    }
+}
+
+.m-l-r-5{
+    margin-left: 5px;
+    margin-right:5px;
+}
+
+.j-end{
+    
+    display: flex;
+    justify-content: flex-end;
+    
+}
+
+.m-t-b-10{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.w585{
+    width: 585px;
+}
+.h74{
+    height: 74px;
+}
+.green{
+    color: green;
+}
+.f2{
+    flex: 2;
+}
+.f3{
+    flex: 3;
+}
+.options-item{
+    .ant-select-selection--single{
+        height:28px;
+    }
+}
